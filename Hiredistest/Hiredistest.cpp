@@ -5,8 +5,7 @@
 
 int hiredisConnection(){
 	//timeval timeout = { 60, 500000 };
-	redisContext* context = redisConnect("logstream.wasras.com", 6379); // Auris
-	//redisContext* context = redisConnectWithTimeout("172.25.25.19", 6379, timeout); // Auris
+	redisContext* context = redisConnect("ADD URI", 6379); // Auris
 
 	if (context == nullptr || context->err) {
 		if (context) {
