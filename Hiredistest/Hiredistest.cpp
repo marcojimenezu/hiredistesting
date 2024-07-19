@@ -1,11 +1,86 @@
 #include "stdafx.h"
 #include <iostream>
+#include <winsock.h>
 #include <hiredis\hiredis.h>
 
+class CConnectionInformation
+{
+public:
+	CConnectionInformation()
+		: Port(0)
+	{
+		memset(this->Host, 0, sizeof(this->Host));
+	}
+	virtual ~CConnectionInformation()
+	{}
 
-int hiredisConnection(){
-	//timeval timeout = { 60, 500000 };
-	redisContext* context = redisConnect("ADD URI", 6379); // Auris
+	char Host[129];
+	unsigned long Port;
+
+};
+
+CConnectionInformation g_RedisConnectionRTLogServer;
+
+// No synchronization needed - this will called in teh Thread reading the Log Queue which is already synchronized
+class CRTLogtoREDIS
+{
+	CRTLogtoREDIS()
+	:m_redisContext(nullptr)
+	{
+
+	}
+
+	virtual ~CRTLogtoREDIS()
+	{
+
+	}
+
+	bool Connect()
+	{
+		bool l_Result(false);
+
+		if (!this->m_redisContext)
+		{
+			timeval timeout = { 0, 500000 }; // 0.5 seconds
+			this->m_redisContext = redisConnectWithTimeout(g_RedisConnectionRTLogServer.Host, g_RedisConnectionRTLogServer.Port, timeout);
+
+			if ((this->m_redisContext != nullptr) && (this->m_redisContext->err == REDIS_OK))
+			{
+				redisEnableKeepAlive(this->m_redisContext);
+
+				if (!this->Authenticate())
+				{
+					redisFree(this->m_redisContext);
+					this->m_redisContext = nullptr;
+				}
+			}
+		}
+
+		if ((this->m_redisContext != nullptr) && (this->m_redisContext->err == REDIS_OK))
+			l_Result = true;
+		else
+		{
+			redisFree(this->m_redisContext);
+			this->m_redisContext = nullptr;
+		}
+
+		return (l_Result);
+	}
+
+
+private:
+	redisContext* m_redisContext;
+
+
+};
+
+
+
+int hiredisConnection()
+{
+	timeval timeout = { 0, 500000 }; // 0.5 seconds
+	this->Context = redisConnectWithTimeout(l_ConnectionInformation.Host, l_ConnectionInformation.Port, timeout);
+
 
 	if (context == nullptr || context->err) {
 		if (context) {
@@ -46,6 +121,8 @@ int hiredisConnection(){
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	strncpy_s(g_RedisConnectionRTLogServer.Host, "logstream.wasras.com", _TRUNCATE);
+	g_RedisConnectionRTLogServer.Port = 6379;
 	hiredisConnection();
 	getchar();
 	return 0;

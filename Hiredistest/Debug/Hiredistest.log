@@ -1,28 +1,46 @@
-﻿Build started 09/07/2024 03:16:45 p. m..
-     1>Project "C:\Dev\Visual Studio 2013\Hiredistest\Hiredistest\Hiredistest.vcxproj" on node 2 (Build target(s)).
+﻿Build started 7/19/2024 7:24:12 PM.
+     1>Project "C:\Projects.vic.auris\MarcoHiRedis\hiredistesting\Hiredistest\Hiredistest.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Dev\Visual Studio 2013\Hiredistest\Hiredistest\Hiredis\src" /I"C:\Dev\Visual Studio 2013\Hiredistest\Hiredistest\Hiredis\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _CONSOLE /D _LIB /D _MBCS /D _MBCS /D _QUEUE /D _CRT_SECURE_NO_WARNINGS /Gm- /EHa /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Hiredistest.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Projects.vic.auris\MarcoHiRedis\hiredistesting\Hiredistest\Hiredis\src /IC:\Projects.vic.auris\MarcoHiRedis\hiredistesting\Hiredistest\Hiredis\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _CONSOLE /D _LIB /D _MBCS /D _MBCS /D _QUEUE /D _CRT_SECURE_NO_WARNINGS /Gm- /EHa /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Hiredistest.cpp
          Hiredistest.cpp
-     1>c:\dev\visual studio 2013\hiredistest\hiredistest\hiredis\include\hiredis\sds.h(55): warning C4200: nonstandard extension used : zero-sized array in struct/union
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredis\include\hiredis\sds.h(55): warning C4200: nonstandard extension used : zero-sized array in struct/union
                  Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>c:\dev\visual studio 2013\hiredistest\hiredistest\hiredis\include\hiredis\sds.h(61): warning C4200: nonstandard extension used : zero-sized array in struct/union
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredis\include\hiredis\sds.h(61): warning C4200: nonstandard extension used : zero-sized array in struct/union
                  Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>c:\dev\visual studio 2013\hiredistest\hiredistest\hiredis\include\hiredis\sds.h(67): warning C4200: nonstandard extension used : zero-sized array in struct/union
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredis\include\hiredis\sds.h(67): warning C4200: nonstandard extension used : zero-sized array in struct/union
                  Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>c:\dev\visual studio 2013\hiredistest\hiredistest\hiredis\include\hiredis\sds.h(73): warning C4200: nonstandard extension used : zero-sized array in struct/union
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredis\include\hiredis\sds.h(73): warning C4200: nonstandard extension used : zero-sized array in struct/union
                  Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>c:\dev\visual studio 2013\hiredistest\hiredistest\hiredis\include\hiredis\sds.h(79): warning C4200: nonstandard extension used : zero-sized array in struct/union
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredis\include\hiredis\sds.h(79): warning C4200: nonstandard extension used : zero-sized array in struct/union
                  Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>c:\dev\visual studio 2013\hiredistest\hiredistest\hiredis\include\hiredis\sds.h(105): warning C4244: 'return' : conversion from 'uint64_t' to 'size_t', possible loss of data
-     1>c:\dev\visual studio 2013\hiredistest\hiredistest\hiredis\include\hiredis\sds.h(130): warning C4244: 'return' : conversion from 'uint64_t' to 'size_t', possible loss of data
-     1>c:\dev\visual studio 2013\hiredistest\hiredistest\hiredis\include\hiredis\sds.h(198): warning C4244: 'return' : conversion from 'uint64_t' to 'size_t', possible loss of data
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Dev\Visual Studio 2013\Hiredistest\Debug\Hiredistest.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Dev\Visual Studio 2013\Hiredistest\Hiredistest\Hiredis\lib" /LIBPATH:"C:\Dev\Visual Studio 2013\Hiredistest\Hiredistest\Hiredis\Debug" hiredis.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Dev\Visual Studio 2013\Hiredistest\Debug\Hiredistest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Dev\Visual Studio 2013\Hiredistest\Debug\Hiredistest.lib" /MACHINE:X86 Debug\Hiredistest.obj
-         Debug\stdafx.obj
-     1>Hiredistest.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
-         Hiredistest.vcxproj -> C:\Dev\Visual Studio 2013\Hiredistest\Debug\Hiredistest.exe
-     1>Done Building Project "C:\Dev\Visual Studio 2013\Hiredistest\Hiredistest\Hiredistest.vcxproj" (Build target(s)).
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredis\include\hiredis\sds.h(105): warning C4244: 'return' : conversion from 'uint64_t' to 'size_t', possible loss of data
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredis\include\hiredis\sds.h(130): warning C4244: 'return' : conversion from 'uint64_t' to 'size_t', possible loss of data
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredis\include\hiredis\sds.h(198): warning C4244: 'return' : conversion from 'uint64_t' to 'size_t', possible loss of data
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(42): error C2079: 'timeout' uses undefined struct 'timeval'
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(42): error C2440: 'initializing' : cannot convert from 'initializer-list' to 'int'
+                 Only an initializer-list with zero or one elements can be converted to this type
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(43): error C2355: 'this' : can only be referenced inside non-static member functions or non-static data member initializers
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(43): error C2227: left of '->Context' must point to class/struct/union/generic type
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(43): error C2065: 'l_ConnectionInformation' : undeclared identifier
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(43): error C2228: left of '.Host' must have class/struct/union
+                 type is 'unknown-type'
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(43): error C2228: left of '.Port' must have class/struct/union
+                 type is 'unknown-type'
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(43): error C2660: 'redisConnectWithTimeout' : function does not take 2 arguments
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(46): error C2065: 'context' : undeclared identifier
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(46): error C2227: left of '->err' must point to class/struct/union/generic type
+                 type is 'unknown-type'
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(47): error C2065: 'context' : undeclared identifier
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(48): error C2065: 'context' : undeclared identifier
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(48): error C2227: left of '->errstr' must point to class/struct/union/generic type
+                 type is 'unknown-type'
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(49): error C2065: 'context' : undeclared identifier
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(58): error C2065: 'context' : undeclared identifier
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(61): error C2065: 'context' : undeclared identifier
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(68): error C2065: 'context' : undeclared identifier
+     1>c:\projects.vic.auris\marcohiredis\hiredistesting\hiredistest\hiredistest.cpp(77): error C2065: 'context' : undeclared identifier
+     1>Done Building Project "C:\Projects.vic.auris\MarcoHiRedis\hiredistesting\Hiredistest\Hiredistest.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:01.26
+Time Elapsed 00:00:00.35
