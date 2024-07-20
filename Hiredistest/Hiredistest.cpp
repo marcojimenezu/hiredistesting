@@ -38,8 +38,48 @@ public:
 
 	virtual ~CRTLogtoREDIS()
 	{
-
+		this->Disconnect();
 	}
+
+	bool Log(LPCSTR LogText)
+	{
+		bool l_Result(false);
+
+		redisReply* l_redisReply = nullptr;
+
+		char l_commandtext[1024];
+
+		__time64_t l_timestamp = _time64(nullptr);
+
+		sprintf_s(l_commandtext, "evalsha %s 0 %li %li %I64i %I64i %li %li"
+			, SHA
+			, Operation
+			, TrunkID
+			, SessionID
+			, l_timestamp
+			, ApplicationID
+			, HostID
+			);
+
+		l_redisReply = this->Command(l_commandtext);
+
+		if (l_redisReply)
+		{
+			//if (l_redisReply->type == REDIS_REPLY_INTEGER)  // if not there was a problem
+			//{
+			//	//Value = (int)l_redisReply->integer;
+			//}
+
+			l_Result = true;
+
+			freeReplyObject(l_redisReply);
+		}
+		return (l_Result);
+	}
+
+private:
+
+	redisContext* m_redisContext;
 
 	bool Connect()
 	{
@@ -65,12 +105,15 @@ public:
 		if ((this->m_redisContext != nullptr) && (this->m_redisContext->err == REDIS_OK))
 			l_Result = true;
 		else
-		{
-			redisFree(this->m_redisContext);
-			this->m_redisContext = nullptr;
-		}
+			this->Disconnect();
 
 		return (l_Result);
+	}
+
+	void Disconnect()
+	{
+		redisFree(this->m_redisContext);
+		this->m_redisContext = nullptr;
 	}
 
 	bool Authenticate()
@@ -98,6 +141,8 @@ public:
 
 			freeReplyObject(l_redisReply);
 		}
+
+		if (!l_result) this->Disconnect();
 
 		return l_result;
 	}
@@ -148,13 +193,6 @@ public:
 
 		return l_redisReply;
 	}
-
-
-
-
-private:
-
-	redisContext* m_redisContext;
 
 
 };
