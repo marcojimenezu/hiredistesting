@@ -27,6 +27,9 @@ CConnectionInformation g_RedisConnectionRTLogServer;
 // No synchronization needed - this will called in teh Thread reading the Log Queue which is already synchronized
 class CRTLogtoREDIS
 {
+
+public:
+
 	CRTLogtoREDIS()
 	:m_redisContext(nullptr)
 	{
@@ -99,9 +102,58 @@ class CRTLogtoREDIS
 		return l_result;
 	}
 
+	redisReply* Command(char* CommandText)
+	{
+		redisReply* l_redisReply = nullptr;
+
+		// Try four times if either the conection failover mechanism can't get a hold of a redis server or if the command returns empty
+		for (unsigned int i = 0; ((i < 4) && (l_redisReply == nullptr)); ++i)
+		{
+			if (this->Connect())
+			{
+				//RedisDebugLog
+				//pLogger->Log(ELEVEL_1
+				//	, "Thread[%10I64u] RedisDebugLog: %s { "
+				//	" CommandText \"%s\""
+				//	" PoolObjectID %llu"
+				//	" } "
+				//	, GetCurrentThreadId() * 1000 + ApplicationID
+				//	, __FUNCTION__
+				//	, CommandText
+				//	, this->PoolObjectID
+				//	);
+
+				l_redisReply = (redisReply*)redisCommand(this->m_redisContext, CommandText);
+
+				//RedisDebugLog
+				//pLogger->Log(ELEVEL_1
+				//	, "Thread[%10I64u] RedisDebugLog: %s { "
+				//	" CommandText \"%s\""
+				//	" l_redisReply = 0x%p"
+				//	" l_redisReply->type = %li"
+				//	" l_redisReply->integer = %lli"
+				//	" PoolObjectID %llu"
+				//	" } "
+				//	, GetCurrentThreadId() * 1000 + ApplicationID
+				//	, __FUNCTION__
+				//	, CommandText
+				//	, (void*)l_redisReply
+				//	, (l_redisReply != nullptr) ? l_redisReply->type : 0
+				//	, (l_redisReply != nullptr) ? l_redisReply->integer : 0
+				//	, this->PoolObjectID
+				//	);
+
+			}
+		}
+
+		return l_redisReply;
+	}
+
+
 
 
 private:
+
 	redisContext* m_redisContext;
 
 
@@ -109,54 +161,13 @@ private:
 
 
 
-int hiredisConnection()
-{
-	timeval timeout = { 0, 500000 }; // 0.5 seconds
-	this->Context = redisConnectWithTimeout(l_ConnectionInformation.Host, l_ConnectionInformation.Port, timeout);
-
-
-	if (context == nullptr || context->err) {
-		if (context) {
-			std::cerr << "Error: " << context->errstr << std::endl;
-			redisFree(context);
-		}
-		else {
-			std::cerr << "Can't allocate Redis context" << std::endl;
-		}
-		getchar();
-		return 1;
-	}
-
-	redisReply* reply = (redisReply*)redisCommand(context, "SET %s %s", "Marco", "Testing2");
-	if (reply == nullptr) {
-		std::cerr << "SET command failed" << std::endl;
-		redisFree(context);
-		getchar();
-		return 1;
-	}
-	std::cout << "SET: " << reply->str << std::endl;
-	freeReplyObject(reply);
-
-	reply = (redisReply*)redisCommand(context, "GET %s", "Marco");
-	if (reply->type == REDIS_REPLY_STRING) {
-		std::cout << "GET: " << reply->str << std::endl;
-		std::cout << "The test was successful" << std::endl;
-	}
-	else {
-		std::cerr << "GET command failed" << std::endl;
-	}
-	freeReplyObject(reply);
-	redisFree(context);
-
-	getchar();
-	return 0;
-}
-
 int _tmain(int argc, _TCHAR* argv[])
 {
 	strncpy_s(g_RedisConnectionRTLogServer.Host, "logstream.wasras.com", _TRUNCATE);
 	g_RedisConnectionRTLogServer.Port = 6379;
-	hiredisConnection();
+
+	CRTLogtoREDIS l_CRTLogtoREDIS;
+
 	getchar();
 	return 0;
 }
