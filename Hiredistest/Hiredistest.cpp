@@ -47,18 +47,12 @@ public:
 
 		redisReply* l_redisReply = nullptr;
 
-		char l_commandtext[1024];
+		char l_commandtext[1024 * 15];
 
-		__time64_t l_timestamp = _time64(nullptr);
+		//__time64_t l_timestamp = _time64(nullptr);
 
-		sprintf_s(l_commandtext, "evalsha %s 0 %li %li %I64i %I64i %li %li"
-			, SHA
-			, Operation
-			, TrunkID
-			, SessionID
-			, l_timestamp
-			, ApplicationID
-			, HostID
+		sprintf_s(l_commandtext, "publish logstream %s"
+			,LogText
 			);
 
 		l_redisReply = this->Command(l_commandtext);
@@ -205,6 +199,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	g_RedisConnectionRTLogServer.Port = 6379;
 
 	CRTLogtoREDIS l_CRTLogtoREDIS;
+
+	l_CRTLogtoREDIS.Log("This is a fucking test from Vic the Master. Be warned!");
 
 	getchar();
 	return 0;
