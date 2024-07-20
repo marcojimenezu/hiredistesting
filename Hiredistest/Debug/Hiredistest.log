@@ -1,4 +1,4 @@
-﻿Build started 7/19/2024 8:59:50 PM.
+﻿Build started 7/19/2024 9:23:46 PM.
      1>Project "C:\Projects.vic.auris\MarcoHiRedis\hiredistesting\Hiredistest\Hiredistest.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Projects.vic.auris\MarcoHiRedis\hiredistesting\Hiredistest\Hiredis\src /IC:\Projects.vic.auris\MarcoHiRedis\hiredistesting\Hiredistest\Hiredis\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _CONSOLE /D _LIB /D _MBCS /D _MBCS /D _QUEUE /D _CRT_SECURE_NO_WARNINGS /Gm- /EHa /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Hiredistest.cpp
@@ -25,4 +25,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.62
+Time Elapsed 00:00:01.16

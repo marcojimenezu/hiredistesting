@@ -51,7 +51,7 @@ public:
 
 		//__time64_t l_timestamp = _time64(nullptr);
 
-		sprintf_s(l_commandtext, "publish logstream \"%s\""
+		sprintf_s(l_commandtext, "publish logstream \"%s\"\n"
 			,LogText
 			);
 
@@ -208,6 +208,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	CRTLogtoREDIS l_CRTLogtoREDIS;
 
 	l_CRTLogtoREDIS.Log("This is a fucking test by Vic the Master. Be advised!");
+	l_CRTLogtoREDIS.Log("Hello!World");
 
 	system("pause");
 	//getchar();
