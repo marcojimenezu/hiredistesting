@@ -1,22 +1,25 @@
 #include "stdafx.h"
+#include <stdio.h>
 #include <iostream>
 #include <winsock.h>
 #include <hiredis\hiredis.h>
 
 class CConnectionInformation
 {
+
 public:
 	CConnectionInformation()
 		: Port(0)
 	{
 		memset(this->Host, 0, sizeof(this->Host));
+		memset(this->AuthenticationPassword, 0, sizeof(this->Host));
 	}
 	virtual ~CConnectionInformation()
 	{}
 
 	char Host[129];
 	unsigned long Port;
-
+	char AuthenticationPassword[129];
 };
 
 CConnectionInformation g_RedisConnectionRTLogServer;
@@ -66,6 +69,36 @@ class CRTLogtoREDIS
 
 		return (l_Result);
 	}
+
+	bool Authenticate()
+	{
+		bool l_result = false;
+		redisReply* l_redisReply = nullptr;
+
+		const char l_AuthenticationCommand[] = { "auth" };
+
+		static char l_commandtext[_countof(l_AuthenticationCommand) + _countof(g_RedisConnectionRTLogServer.AuthenticationPassword) + (2 * sizeof(char))];
+
+		sprintf_s(l_commandtext, _countof(l_commandtext), "%s %s"
+			, l_AuthenticationCommand
+			, g_RedisConnectionRTLogServer.AuthenticationPassword
+			);
+
+		l_redisReply = this->Command(l_commandtext);
+
+		if (l_redisReply)
+		{
+			if (l_redisReply->type == REDIS_REPLY_STATUS)  // if not the there was a problem
+			{
+				l_result = (l_redisReply->len == 2); /* "OK" */
+			}
+
+			freeReplyObject(l_redisReply);
+		}
+
+		return l_result;
+	}
+
 
 
 private:
