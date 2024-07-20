@@ -51,7 +51,7 @@ public:
 
 		//__time64_t l_timestamp = _time64(nullptr);
 
-		sprintf_s(l_commandtext, "publish logstream \"%s\"\n"
+		sprintf_s(l_commandtext, "publish logstream \"%s\""
 			,LogText
 			);
 
@@ -62,12 +62,14 @@ public:
 
 		if (l_redisReply)
 		{
+
+			printf_s("type: %ld    integer: %lld     str: %s\r\n\r\n", l_redisReply->type, l_redisReply->integer, l_redisReply->str);
 			//if (l_redisReply->type == REDIS_REPLY_INTEGER)  // if not there was a problem
 			//{
 			//	//Value = (int)l_redisReply->integer;
 			//}
 
-			l_Result = true;
+			l_Result = ((l_redisReply->type = REDIS_REPLY_INTEGER) && (l_redisReply->integer = 1));
 
 			freeReplyObject(l_redisReply);
 		}
