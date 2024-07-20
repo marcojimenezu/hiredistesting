@@ -51,9 +51,12 @@ public:
 
 		//__time64_t l_timestamp = _time64(nullptr);
 
-		sprintf_s(l_commandtext, "publish logstream %s"
+		sprintf_s(l_commandtext, "publish logstream \"%s\""
 			,LogText
 			);
+
+		printf(l_commandtext); printf("\r\n");
+		
 
 		l_redisReply = this->Command(l_commandtext);
 
@@ -68,6 +71,9 @@ public:
 
 			freeReplyObject(l_redisReply);
 		}
+		else
+			this->Disconnect();
+
 		return (l_Result);
 	}
 
@@ -89,10 +95,8 @@ private:
 				redisEnableKeepAlive(this->m_redisContext);
 
 				if (!this->Authenticate())
-				{
-					redisFree(this->m_redisContext);
-					this->m_redisContext = nullptr;
-				}
+					this->Disconnect();
+
 			}
 		}
 
@@ -113,30 +117,33 @@ private:
 	bool Authenticate()
 	{
 		bool l_result = false;
-		redisReply* l_redisReply = nullptr;
 
-		const char l_AuthenticationCommand[] = { "auth" };
+		//redisReply* l_redisReply = nullptr;
 
-		static char l_commandtext[_countof(l_AuthenticationCommand) + _countof(g_RedisConnectionRTLogServer.AuthenticationPassword) + (2 * sizeof(char))];
+		//const char l_AuthenticationCommand[] = { "auth" };
 
-		sprintf_s(l_commandtext, _countof(l_commandtext), "%s %s"
-			, l_AuthenticationCommand
-			, g_RedisConnectionRTLogServer.AuthenticationPassword
-			);
+		//static char l_commandtext[_countof(l_AuthenticationCommand) + _countof(g_RedisConnectionRTLogServer.AuthenticationPassword) + (2 * sizeof(char))];
 
-		l_redisReply = this->Command(l_commandtext);
+		//sprintf_s(l_commandtext, _countof(l_commandtext), "%s %s"
+		//	, l_AuthenticationCommand
+		//	, g_RedisConnectionRTLogServer.AuthenticationPassword
+		//	);
 
-		if (l_redisReply)
-		{
-			if (l_redisReply->type == REDIS_REPLY_STATUS)  // if not the there was a problem
-			{
-				l_result = (l_redisReply->len == 2); /* "OK" */
-			}
+		//l_redisReply = this->Command(l_commandtext);
 
-			freeReplyObject(l_redisReply);
-		}
+		//if (l_redisReply)
+		//{
+		//	if (l_redisReply->type == REDIS_REPLY_STATUS)  // if not the there was a problem
+		//	{
+		//		l_result = (l_redisReply->len == 2); /* "OK" */
+		//	}
 
-		if (!l_result) this->Disconnect();
+		//	freeReplyObject(l_redisReply);
+		//}
+
+		//if (!l_result) this->Disconnect();
+
+		l_result = true;
 
 		return l_result;
 	}
@@ -200,9 +207,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	CRTLogtoREDIS l_CRTLogtoREDIS;
 
-	l_CRTLogtoREDIS.Log("This is a fucking test from Vic the Master. Be warned!");
+	l_CRTLogtoREDIS.Log("This is a fucking test by Vic the Master. Be advised!");
 
-	getchar();
+	system("pause");
+	//getchar();
+
 	return 0;
 }
 
