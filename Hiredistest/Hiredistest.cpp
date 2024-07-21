@@ -47,29 +47,39 @@ public:
 
 		redisReply* l_redisReply = nullptr;
 
-		char l_commandtext[1024 * 15];
+		//char l_commandtext[1024 * 15];
 
-		//__time64_t l_timestamp = _time64(nullptr);
+		//sprintf_s(l_commandtext, "publish logstream \"%s\""
+		//	,LogText
+		//	);
 
-		sprintf_s(l_commandtext, "publish logstream \"%s\""
-			,LogText
-			);
 
-		printf(l_commandtext); printf("\r\n");
-		
+		//printf(l_commandtext); printf("\r\n");
+		//
 
-		l_redisReply = this->Command(l_commandtext);
+		//l_redisReply = this->Command(l_commandtext);
+
+		//if (l_redisReply)
+		//{
+
+		//	printf_s("type: %ld    integer: %lld     str: %s\r\n\r\n", l_redisReply->type, l_redisReply->integer, l_redisReply->str);
+
+		//	l_Result = ((l_redisReply->type = REDIS_REPLY_INTEGER) && (l_redisReply->integer = 2));
+
+		//	freeReplyObject(l_redisReply);
+		//}
+		//else
+		//	this->Disconnect();
+
+
+		l_redisReply = this->PublishLogstream(LogText);
 
 		if (l_redisReply)
 		{
 
-			printf_s("type: %ld    integer: %lld     str: %s\r\n\r\n", l_redisReply->type, l_redisReply->integer, l_redisReply->str);
-			//if (l_redisReply->type == REDIS_REPLY_INTEGER)  // if not there was a problem
-			//{
-			//	//Value = (int)l_redisReply->integer;
-			//}
+			printf_s("LogText: %s    type: %ld    integer: %lld     str: %s\r\n\r\n", LogText, l_redisReply->type, l_redisReply->integer, l_redisReply->str);
 
-			l_Result = ((l_redisReply->type = REDIS_REPLY_INTEGER) && (l_redisReply->integer = 1));
+			l_Result = ((l_redisReply->type = REDIS_REPLY_INTEGER) && (l_redisReply->integer == 2));
 
 			freeReplyObject(l_redisReply);
 		}
@@ -150,48 +160,66 @@ private:
 		return l_result;
 	}
 
-	redisReply* Command(char* CommandText)
+	//redisReply* Command(char* CommandText)
+	//{
+	//	redisReply* l_redisReply = nullptr;
+
+	//	// Try four times if either the conection failover mechanism can't get a hold of a redis server or if the command returns empty
+	//	for (unsigned int i = 0; ((i < 4) && (l_redisReply == nullptr)); ++i)
+	//	{
+	//		if (this->Connect())
+	//		{
+	//			//RedisDebugLog
+	//			//pLogger->Log(ELEVEL_1
+	//			//	, "Thread[%10I64u] RedisDebugLog: %s { "
+	//			//	" CommandText \"%s\""
+	//			//	" PoolObjectID %llu"
+	//			//	" } "
+	//			//	, GetCurrentThreadId() * 1000 + ApplicationID
+	//			//	, __FUNCTION__
+	//			//	, CommandText
+	//			//	, this->PoolObjectID
+	//			//	);
+
+	//			l_redisReply = (redisReply*)redisCommand(this->m_redisContext, CommandText);
+
+	//			//RedisDebugLog
+	//			//pLogger->Log(ELEVEL_1
+	//			//	, "Thread[%10I64u] RedisDebugLog: %s { "
+	//			//	" CommandText \"%s\""
+	//			//	" l_redisReply = 0x%p"
+	//			//	" l_redisReply->type = %li"
+	//			//	" l_redisReply->integer = %lli"
+	//			//	" PoolObjectID %llu"
+	//			//	" } "
+	//			//	, GetCurrentThreadId() * 1000 + ApplicationID
+	//			//	, __FUNCTION__
+	//			//	, CommandText
+	//			//	, (void*)l_redisReply
+	//			//	, (l_redisReply != nullptr) ? l_redisReply->type : 0
+	//			//	, (l_redisReply != nullptr) ? l_redisReply->integer : 0
+	//			//	, this->PoolObjectID
+	//			//	);
+
+	//		}
+	//	}
+
+	//	return l_redisReply;
+	//}
+
+	redisReply* PublishLogstream(LPCSTR Text)
 	{
 		redisReply* l_redisReply = nullptr;
 
 		// Try four times if either the conection failover mechanism can't get a hold of a redis server or if the command returns empty
 		for (unsigned int i = 0; ((i < 4) && (l_redisReply == nullptr)); ++i)
 		{
+
 			if (this->Connect())
 			{
-				//RedisDebugLog
-				//pLogger->Log(ELEVEL_1
-				//	, "Thread[%10I64u] RedisDebugLog: %s { "
-				//	" CommandText \"%s\""
-				//	" PoolObjectID %llu"
-				//	" } "
-				//	, GetCurrentThreadId() * 1000 + ApplicationID
-				//	, __FUNCTION__
-				//	, CommandText
-				//	, this->PoolObjectID
-				//	);
-
-				l_redisReply = (redisReply*)redisCommand(this->m_redisContext, CommandText);
-
-				//RedisDebugLog
-				//pLogger->Log(ELEVEL_1
-				//	, "Thread[%10I64u] RedisDebugLog: %s { "
-				//	" CommandText \"%s\""
-				//	" l_redisReply = 0x%p"
-				//	" l_redisReply->type = %li"
-				//	" l_redisReply->integer = %lli"
-				//	" PoolObjectID %llu"
-				//	" } "
-				//	, GetCurrentThreadId() * 1000 + ApplicationID
-				//	, __FUNCTION__
-				//	, CommandText
-				//	, (void*)l_redisReply
-				//	, (l_redisReply != nullptr) ? l_redisReply->type : 0
-				//	, (l_redisReply != nullptr) ? l_redisReply->integer : 0
-				//	, this->PoolObjectID
-				//	);
-
+				l_redisReply = (redisReply*)redisCommand(this->m_redisContext, "publish logstream %s", Text);
 			}
+
 		}
 
 		return l_redisReply;
