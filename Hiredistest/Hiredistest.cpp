@@ -24,14 +24,14 @@ public:
 
 CConnectionInformation g_RedisConnectionRTLogServer;
 
-// No synchronization needed - this will called in teh Thread reading the Log Queue which is already synchronized
+// No synchronization needed - this will called in the Thread reading the Log Queue which is already synchronized
 class CRTLogtoREDIS
 {
 
 public:
 
 	CRTLogtoREDIS()
-	:m_redisContext(nullptr)
+		:m_redisContext(nullptr)
 	{
 
 	}
@@ -45,46 +45,33 @@ public:
 	{
 		bool l_Result(false);
 
-		redisReply* l_redisReply = nullptr;
-
-		//char l_commandtext[1024 * 15];
-
-		//sprintf_s(l_commandtext, "publish logstream \"%s\""
-		//	,LogText
-		//	);
-
-
-		//printf(l_commandtext); printf("\r\n");
-		//
-
-		//l_redisReply = this->Command(l_commandtext);
-
-		//if (l_redisReply)
-		//{
-
-		//	printf_s("type: %ld    integer: %lld     str: %s\r\n\r\n", l_redisReply->type, l_redisReply->integer, l_redisReply->str);
-
-		//	l_Result = ((l_redisReply->type = REDIS_REPLY_INTEGER) && (l_redisReply->integer = 2));
-
-		//	freeReplyObject(l_redisReply);
-		//}
-		//else
-		//	this->Disconnect();
-
-
-		l_redisReply = this->PublishLogstream(LogText);
-
-		if (l_redisReply)
+		try
 		{
+			redisReply* l_redisReply = nullptr;
 
-			printf_s("LogText: %s    type: %ld    integer: %lld     str: %s\r\n\r\n", LogText, l_redisReply->type, l_redisReply->integer, l_redisReply->str);
+			l_redisReply = this->PublishLogstream(LogText);
 
-			l_Result = ((l_redisReply->type = REDIS_REPLY_INTEGER) && (l_redisReply->integer == 2));
+			if (l_redisReply)
+			{
 
-			freeReplyObject(l_redisReply);
+				printf_s("%s: %s    type: %ld    integer: %lld     str: %s\r\n\r\n", __FUNCTION__, LogText, l_redisReply->type, l_redisReply->integer, l_redisReply->str);
+
+				l_Result = ((l_redisReply->type == REDIS_REPLY_INTEGER) /*&& (l_redisReply->integer == 2)*/);
+
+				freeReplyObject(l_redisReply);
+			}
+
 		}
-		else
+		catch (...)
+		{
+			printf_s("try...catch %s", __FUNCTION__);
+		}
+
+		if (!l_Result)
+		{
 			this->Disconnect();
+			printf_s("Error while %s: [%s]", __FUNCTION__, LogText);
+		}
 
 		return (l_Result);
 	}
@@ -97,65 +84,91 @@ private:
 	{
 		bool l_Result(false);
 
-		if (!this->m_redisContext)
+		try
 		{
-			timeval timeout = { 0, 500000 }; // 0.5 seconds
-			this->m_redisContext = redisConnectWithTimeout(g_RedisConnectionRTLogServer.Host, g_RedisConnectionRTLogServer.Port, timeout);
+			if (!this->m_redisContext)
+			{
+				timeval timeout = { 0, 500000 }; // 0.5 seconds
+				this->m_redisContext = redisConnectWithTimeout(g_RedisConnectionRTLogServer.Host, g_RedisConnectionRTLogServer.Port, timeout);
+
+				if ((this->m_redisContext != nullptr) && (this->m_redisContext->err == REDIS_OK))
+				{
+					redisEnableKeepAlive(this->m_redisContext);
+
+					if (!this->Authenticate())
+						this->Disconnect();
+
+				}
+			}
 
 			if ((this->m_redisContext != nullptr) && (this->m_redisContext->err == REDIS_OK))
-			{
-				redisEnableKeepAlive(this->m_redisContext);
+				l_Result = true;
+			else
+				this->Disconnect();
 
-				if (!this->Authenticate())
-					this->Disconnect();
-
-			}
 		}
-
-		if ((this->m_redisContext != nullptr) && (this->m_redisContext->err == REDIS_OK))
-			l_Result = true;
-		else
-			this->Disconnect();
+		catch (...)
+		{
+			printf_s("try...catch %s", __FUNCTION__);
+		}
 
 		return (l_Result);
 	}
 
 	void Disconnect()
 	{
-		redisFree(this->m_redisContext);
-		this->m_redisContext = nullptr;
+		try
+		{
+			if (this->m_redisContext != nullptr)
+				redisFree(this->m_redisContext);
+
+			this->m_redisContext = nullptr;
+		}
+		catch (...)
+		{
+			printf_s("try...catch %s", __FUNCTION__);
+		}
+
 	}
 
 	bool Authenticate()
 	{
 		bool l_result = false;
 
-		//redisReply* l_redisReply = nullptr;
+		try
+		{
+			//redisReply* l_redisReply = nullptr;
 
-		//const char l_AuthenticationCommand[] = { "auth" };
+			//const char l_AuthenticationCommand[] = { "auth" };
 
-		//static char l_commandtext[_countof(l_AuthenticationCommand) + _countof(g_RedisConnectionRTLogServer.AuthenticationPassword) + (2 * sizeof(char))];
+			//static char l_commandtext[_countof(l_AuthenticationCommand) + _countof(g_RedisConnectionRTLogServer.AuthenticationPassword) + (2 * sizeof(char))];
 
-		//sprintf_s(l_commandtext, _countof(l_commandtext), "%s %s"
-		//	, l_AuthenticationCommand
-		//	, g_RedisConnectionRTLogServer.AuthenticationPassword
-		//	);
+			//sprintf_s(l_commandtext, _countof(l_commandtext), "%s %s"
+			//	, l_AuthenticationCommand
+			//	, g_RedisConnectionRTLogServer.AuthenticationPassword
+			//	);
 
-		//l_redisReply = this->Command(l_commandtext);
+			//l_redisReply = this->Command(l_commandtext);
 
-		//if (l_redisReply)
-		//{
-		//	if (l_redisReply->type == REDIS_REPLY_STATUS)  // if not the there was a problem
-		//	{
-		//		l_result = (l_redisReply->len == 2); /* "OK" */
-		//	}
+			//if (l_redisReply)
+			//{
+			//	if (l_redisReply->type == REDIS_REPLY_STATUS)  // if not the there was a problem
+			//	{
+			//		l_result = (l_redisReply->len == 2); /* "OK" */
+			//	}
 
-		//	freeReplyObject(l_redisReply);
-		//}
+			//	freeReplyObject(l_redisReply);
+			//}
 
-		//if (!l_result) this->Disconnect();
+			//if (!l_result) this->Disconnect();
 
-		l_result = true;
+			l_result = true;
+
+		}
+		catch (...)
+		{
+			printf_s("try...catch %s", __FUNCTION__);
+		}
 
 		return l_result;
 	}
@@ -217,7 +230,7 @@ private:
 
 			if (this->Connect())
 			{
-				l_redisReply = (redisReply*)redisCommand(this->m_redisContext, "publish logstream %s", Text);
+				l_redisReply = (redisReply*)redisCommand(this->m_redisContext, "publish logstreamaw %s", Text);
 			}
 
 		}
@@ -227,8 +240,6 @@ private:
 
 
 };
-
-
 
 int _tmain(int argc, _TCHAR* argv[])
 {
